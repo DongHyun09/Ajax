@@ -308,3 +308,44 @@ Onclick 부분을 fetch API를 가져와서 붙여넣을 것이다.
 충분히 경험한 것이다.
 Ajax를 배우는것도 목표이지만, web App이 어떻게 개발해나가는 것인지도 같이 배워나갈 것이다.
 싱글 페이지를 만드는 과정도 같이 해볼것이다 !
+
+##7. 리팩토링 함수화
+
+자 이제우리는 Ajax의 본질을 빠르게 살펴봤으니, 조금 더 우아하게 개선, 발전시켜 나가보자.
+저 위에 코드를 보면, 중복이 발생하고있다.
+우리가 코딩을 하는 과정에서 우리가 언제나 고심해야 될 부분이, 어떻게 해야 중복을 제거할것인가 이다.
+위에 코드를 보면 중복이 있는 부분이 있고, 중복이 되면 안되는 부분이있다.
+이걸 어떻게 해야될까 ?
+
+함수를 이용하면 된다.
+script를 열고
+
+fetch('html').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('article').innerHTML = text;
+      })
+  })
+
+이 코드를 재활용하는 것이 목표이다.
+재활용을 하기 위해 우리는, 코드 친구들을 함수로 묶을 것이다.
+
+  <script>
+  function fetchPage(){
+    fetch('html').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('article').innerHTML = text;
+      })
+  })
+}
+  </script>
+
+
+이 코드에서 바뀔수있는 부분은 fetch() 하나이다.
+그럼 fetchPage(name) 이라고 하고
+name으로 들어오는 매개변수를 fetch에 인자로 넣어주면 된다.
+그럼 fetch라는 녀석을 이렇게 정의했으면
+조금더 아름답게 만들수있다.
+
+  <li><a onclick="fetchPage('html')">HTML</a></li>
+
+이런식으로 ! 얼마나 아름답고 감동적인가.... 가독성, 유지보수성 모두 챙겨간다...
