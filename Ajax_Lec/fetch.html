@@ -14,10 +14,15 @@
         })
         */
        //Asynchronous
-        function callbackme(){
-	    console.log('response end');
-        }
-        fetch('html').then(callbackme);
+        // function callbackme(){
+	    // console.log('response end');
+        // }
+        fetch('Nothing').then(function(response){
+             if(response.status == '404'){
+                alert('Not Found !')
+                }
+            });
+        //fetch('html').then(callbackme);
         console.log(1);
         console.log(2);
         ">

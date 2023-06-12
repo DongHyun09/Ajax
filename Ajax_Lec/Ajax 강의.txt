@@ -177,3 +177,91 @@ fetch api가 어떤 방식으로 출력되냐면,
 비동기는 fetch가 실행되는 동안에 다른 코드들이 실행되는것이다.
 Ajax의 첫번째글자인 Asynchronous의 약자이다.
 
+## 5. API-response 객체
+
+우리가 이전에 썼던 코드는 then 안에 function이 들어가는 괴상한 모양을 하고있다.
+이것을 익명함수라고 한다. 이름이 없는 함수.
+함수가 이름이 필요한 경우는 여기저기서 부를떄 필요하다.
+하지만 여기서는 then안에서만 독점적으로 사용하기때문에 이름을 가질 필요가없다.
+그냥 한몸이 되면 된다.
+그래서, 이런 경우는 똑같은 코드.
+
+    function callbackme(){
+	    console.log('response end');
+        }
+        callbackme = function(){
+            console.log('response end');
+        }
+위에 것을 지워버리고 
+  callbackme = function(){
+            console.log('response end');
+        }
+
+그렇다면
+   fetch('html').then(callbackme);
+        console.log(1);
+        console.log(2);
+이 부분에서 then(callbackme)를 
+callbackme대신 
+function(){
+            console.log('response end');
+        }
+이 녀석을 넣어도 되지않느냐. 맞다.
+ fetch('html').then(function(){
+            console.log('response end');
+        }
+
+그렇게 해서 익명함수를 사용할수있다.
+
+fetch-API 사용 설명서를 보면 쉽지않다.
+사용 설명서를 잘보면
+then에 callback함수를 주게 되면 callback함수를 fetchAPI가 실행 시킬때,
+저 함수의 첫번째 인자의 값으로 response의 값을 주겠습니다. 라고 되어있다.
+이름은 아무렇게나 적어도 된다. 중요한것은 
+fetch('html').then(function(아무이름)){
+console.log('response end');
+});
+이 함수가 호출될떄 입력값을 주면서 호출할것이다. 라고 사용 설명서에 적혀있다.
+우리가 구현한 fetch 버튼을 누르면 웹에서 개발도구창의 콘솔을 보면
+
+Response {type: 'basic', url: 'http://127.0.0.1:5500/html', redirected: false, status: 200, ok: true, …}
+
+이런것이 나오는데 status를 보면 200이 나온다.
+웹브라우저와 웹서버가 통신을 할때 웹서버가 응답을 하면서 파일을 잘 정삭적으로 찾았다 !
+그러면 200이라고 알려준다.
+근데 요청한 파일이 존재하지 않는다면, 404를 던져준다(Not Found). 
+Response라는 객체에 status라는 속성의 값이 200인 것이다.
+그럼 만약 존재하지않는 파일을 fetch에 요청하면 어떤것이 뜰까 ? 
+
+   fetch('Nothing').then(function(response){
+        console.log(response);
+        }); 
+
+이 녀석을 요청해보면 
+
+Response {type: 'basic', url: 'http://127.0.0.1:5500/Nothing', redirected: false, status: 404, ok: false, …}
+
+status가 404가 뜨는 것을 볼수있다. 
+404는 파일이없다는 전세계적인 약속이다.
+웹서버가 404라는 녀석을 브라우저에 보내준다.
+status라는 값을 어떻게 갖고오냐 ?
+객체라는 것에서 .status를 쓰면 가져올수있다.
+
+ fetch('html').then(function(response){
+        console.log(response.status);
+        })
+
+이렇게.
+이제 우리는 이것으로 
+기능 구현을 하나 할수있게 되었다.
+if(response.status == '404'){
+alert('Not Found')
+}
+
+
+ fetch('Nothing').then(function(response){
+      if(response.status == '404'){
+alert('Not Found !')
+}
+});
+alert창이 잘 뜬다.
