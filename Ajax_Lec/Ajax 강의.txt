@@ -1,0 +1,179 @@
+Ajax 강의
+
+
+생활코딩 / 동빈나 
+
+## 0. Web3 - Ajax 개요
+
+JavaScript가 도입되면서 문서에서 애플리케이션으로 발전하기 시작함.
+구글에 a를 넣으면 a의 추천검색어들과 aj를 쓰면 aj의 추천검색어들이 뜨게끔 가능한 이유는
+WebBrouser가 Ajax와 통신을 해서 추천 검색어를 가져온다. 
+이와 같은 기능을 가능하게끔 해주는 것이 Ajax.
+우리는 Ajax라는 낚시대를 이용하여 필요한것만 가져오는 정교한 작업을 해볼것이다.
+
+
+## 1. Ajax 수업의 목적
+
+하나의 웹페이지를 구성하기 위한 파일이 천개고, 100MB라고 한다면
+페이지를 전환할때 모든 파일을 받는것과, 클릭해서 부분적으로 변경하는 Ajax는 사용자 입장에서
+가장 좋은 방법이다. 
+즉, 시간과 돈과 네트워크 자원을 절약할수있는 아주 좋은 방법이다.
+Single-Page Appilcation이라고도 한다.
+하나의 페이지로 여러 페이지를 구현할 수 있는.
+Ajax는 서버와 통신을 해야되기때문에 직접 파일을 열면 안된다.
+웹서버를 통해서 웹사이트를 구동해야만 동작하게 된다.
+
+
+## 2. 동적으로 컨텐츠 변경하기
+
+html을 클릭했을때 본문이 바뀌는 부분을 js가 타겟팅을 하기위해서
+태그를 인위적으로 바꿀 필요가있다.
+ex) <article>
+우리가 하고싶은 것은,
+a href html을 클릭했을때, 웹브라우저야, 이 artilce이라는 태그 안쪽에 내가 얘기하는 tag를 꽂아넣어. 라고 말하는것.
+
+예시)
+
+일단 html(1번)링크를 지워버린다. 
+onClick (event)에서 document.querySelect()가 article 태그를 읽을 수 있도록 해줘야 한다. 
+
+    <li><a onclick="document.querySelector('article').innerHTML = '<h2>HTML</h2>HTML is....';">HTML</a></li>
+    <li><a onclick="document.querySelector('article').innerHTML = '<h2>CSS</h2>CSS is....';">CSS</a></li>
+
+이런식으로 동적으로 바꿀 수가 있다.
+그러면 <article> 태그 안에 정상적으로 출력되는 것을 볼수가 있다.
+그런데 안타깝게도 여기에 있는 이 정보들은 Index.html이라는 파일 안에 있다.
+이 정보가 바뀔때마다 이 파일을 열어야 된다.
+우리가 뭘 하고싶은 것이냐 ?
+Ajax라는 방법을 이용해서 여기에 index.html 파일안에 때려박아놨던 코드가
+이 파일안에 있는 것이 아닌, 별도의 파일명 (HTML)이라는 파일이 있어서
+javascript에 의해서 해당되는 부분을 HTML 파일에서 읽어오게 하고싶은것이다.
+CSS도 HTML도 모두 이런식의 방식으로 읽어오게 하고싶은 것이다.
+
+링크를 클릭했을 때, 웹브라우저가 우리 대신에 웹서버에 접속해서 CSS, HTML의 내용만을 가져온다.
+
+
+## 3. 5.0.fetch API 사용법
+
+Ajax를 구현하는 최신방법중에fetch API 방법이 있다.
+Fetch API를 테스트해보기 위해서 fetch.html이라는 파일을 만들었다.
+버튼을 클릭했을때 fetch API가 동작하게 하고싶다.
+
+<!DOCTYPE html>
+<Html>
+    <body>
+        <input type="button" value="fetch" onclick="alert('hi')">
+    </body>
+</Html>
+
+이렇게 구성
+
+우리가 이 시점에서 과감한 실험을 하나 해볼것이다. 
+무엇이냐면, 우리가 ajax를 사용하기 위해서 필요한 코드를 기계적으로 타이핑하도록
+먼저 할것이다.
+
+<!DOCTYPE html>
+<Html>
+    <body>
+        <input type="button" value="fetch" 
+        onclick="fetch('css').tehn(function(response){
+            response.text().then(function(text){
+                alert(text);
+            })
+        })
+        ">
+    </body>
+</Html>
+
+이렇게.
+
+우리가 스마트폰을 쓸때 원리를 생각하면서 쓰지는 않는다.
+여기 있는 이 코드도 마찬가지이다.
+이 코드에서 우리가 관심을 가질만한 부분과 그렇지 않은 부분을 구분할것이다.
+fetch버튼을 클릭하면 css파일의 내용이 경고창 (alert)으로 출력되는 것을 확인할수있다.
+html도 마찬가지.
+모든작업이 끝난 다음에는 alert(text)부분이 호출되도록 약속되어있고,
+(text)라는 변수 안에 서버가 응답한 데이터가 들어가있다.
+
+즉, html이라는 파일을 요청하고 응답이 끝나면, alert가 실행되면서 text라는 변수에 담겨있다는 것이다.
+경고창 말고, webpage의 내용을 갖고오고 싶다면, article을 써서,
+
+   <body>
+        <article>
+
+
+        </article>
+        <input type="button" value="fetch" 
+        onclick="fetch('html').then(function(response){
+            response.text().then(function(text){
+            document.querySelector('article').innerHTML = text;
+            })
+        })
+        ">
+   </body>
+이렇게 수정해준다면 이번에는 alert창이 아닌 text로 보여준다.
+이후에는 원리를 조금 볼것이다. 나온지 얼마 안된 기술이라, 강사님도 잘 모르신단다.
+
+## 4. API - 요청과 응답
+
+문법적인 부분을 조금 해석을 해볼것이다.
+
+client와 server가 있으면 client가 우선 요청을하는데,
+fetch(javascript)를 실행시키면 이건 무슨 뜻이냐,
+client가 '웹브라우저야, js라는 파일을 server에 응답해줘' 라고 요청한것이다.
+그럼 server가 응답을 할것이다.
+
+그럼, 실습에서,
+
+fetch('html'); 라고만 써두면 
+클릭해보면, html에 접속해서 데이터를 가져오는 것을 볼수있다.
+fetch라는 함수는 첫번째 인자를 서버로부터 요청하는 파일이다.
+
+
+fetch('html').then(function(response){
+            response.text().then(function(text){
+            document.querySelector('article').innerHTML = text;
+            })
+        })
+
+여기서, 
+첫번째 .then은 
+.then(function(response){
+            response.text().then(function(text){
+            document.querySelector('article').innerHTML = text;
+            })
+        })
+여기까지가 하나이다.
+.then이라는 녀석은
+server가 적당한 데이터를 꺼내서 응답을 해줘야되는데,
+응답을 해줄때 시간이 걸릴수도으니
+1시간이 걸린다치면, server가 응답할때까지 다른 업무를 하게끔 하는 명령어이다.
+
+
+function callbackme(){
+	console.log('response end');
+}
+fetch('html').then(callbackme);
+
+fetch API야 응답이 끝나면 내가 지금부터 정의하는 함수(callbackme())라는 함수를 실행시켜줘. 라고 말을 하는것이다.
+
+위에  console.log를 또 추가시켜서 확인해보자.
+
+       function callbackme(){
+	    console.log('response end');
+        }
+        fetch('html').then(callbackme);
+        console.log(1);
+        console.log(2);
+
+이렇게 여기서 보게되면, 
+1,2가 실행이 되고, 웹브라우저가 응답받는게 끝나면 callbackme라는 함수를 호출해서 출력된다.
+fetch api가 어떤 방식으로 출력되냐면,
+"Asynchronous"
+한국어로는 무슨 의미냐면, "비동기" 방식임.
+"Synchronous"는 "동기"
+
+동기로 실행됐다하면, 요청이 시작되고 끝날때까지 실행되지않고 저것들이 멈춰있어야 된다.
+비동기는 fetch가 실행되는 동안에 다른 코드들이 실행되는것이다.
+Ajax의 첫번째글자인 Asynchronous의 약자이다.
+
