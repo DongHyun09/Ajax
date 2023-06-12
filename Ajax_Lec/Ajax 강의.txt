@@ -265,3 +265,46 @@ alert('Not Found !')
 }
 });
 alert창이 잘 뜬다.
+response라는 객체는 fatch를 통해서 요청을 했을때 웹서버가 응답한 결과를 담고있는
+객체, 데이터가 response라는 것이고 그 안에는 여러가지 속성을 통해서
+우리가 어떤 상태로 통신이 이루어져있는지 알수있는 귀중한 것이 들어있다.
+이렇게 우리가 원리를 알면 자유도가 높아진다.
+
+## 6. Ajax의 적용
+
+뭔가를 배웠으면 빨리 써먹어 봐야한다 !
+우리가 쓴 저 코드들을 어떻게 써보면 될까 ?
+우리가 활용하려는 index.html을 열어보자.
+Onclick 부분을 fetch API를 가져와서 붙여넣을 것이다.
+
+
+<ol>
+    <li><a onclick="
+    fetch('html').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('article').innerHTML = text;
+      })
+  })">HTML</a></li>
+    <li><a onclick="
+    fetch('css').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('article').innerHTML = text;
+      })
+  })">CSS</a></li>
+    <li><a onclick="
+      fetch('javascript').then(function(response){
+        response.text().then(function(text){
+         document.querySelector('article').innerHTML = text;
+        })
+    })">JavaScript</a></li>
+  </ol>
+  <article>
+
+  </article>
+
+이렇게 이제 각각 수정을 했다.
+이렇게 되면 사실 이제, 본질적인 다 한것이다.
+우리의 예제에서는 아주 우아한 방법은 아니지만, Ajax가 무엇이다. 라는 것을
+충분히 경험한 것이다.
+Ajax를 배우는것도 목표이지만, web App이 어떻게 개발해나가는 것인지도 같이 배워나갈 것이다.
+싱글 페이지를 만드는 과정도 같이 해볼것이다 !
