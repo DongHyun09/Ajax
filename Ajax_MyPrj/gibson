@@ -1,7 +1,10 @@
 <html>
 <body>         
     <a onclick="fetchPrj('g1')">g1</a>
+    <a onclick="fetchPrj('g2')">g2</a>
+<div align="center">
         <article>
         </article> 
+    </div>        
     </body>
 </html>
