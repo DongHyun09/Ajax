@@ -486,3 +486,75 @@ Ajax를 이용해서 하게 되면 검색엔진 최적화가 잘 되지않는다
 현재는 "pjax"라고 하는 기술을 많이 사용한다.
 이것은 새로운 기술이 아니라, 여러가지 방식을 보안한 기술이다.
 필요할때 공부하면 된다.
+
+## 9-1. 글 목록 (1/2)
+
+정상에 올라왔으니 하산을 해보자.
+프로그래머들은 데이터와 로직, 혹은 데이터와 애플리케이션을 구분한다.
+index.html은 데이터면서 로직이 같이 혼재되어있다.
+그럼 여기서 누가 데이터냐 ? 
+
+    <li><a href="#!html" onclick="fetchPage('html')">HTML</a></li>
+    <li><a href="#!css" onclick="fetchPage('css')">CSS</a></li>
+    <li><a href="#!javascript" onclick="fetchPage('javascript');">JavaScript</a>        </li>
+
+이 녀석이 데이터이다.
+이 녀석들의 특징은, 바뀔 수 있다.
+데이터는 애플리케이션을 계속 쓰다보면 바뀌어야하는 것이고 그래야 의미가 있다.
+어쨌든, 이 녀석들은 바뀔수있는 데이터적의 성격을 가지고 있기때문에, 이 녀석들을 바깥으로 옮겨 놓을 것이다.
+이 녀석들을 list라는 파엘이 잘라넣기 하고,
+저 li의 상위 태그인 ol의 id값을 nav라고 줬다고 치면, script에다가
+list라는 파일을 읽어서 거기에있는 내용을 id값이 nav인 태그 안쪽에 넣어라는 코드를 작성하면 된다. 
+
+그러기 위해서는, 
+
+ <script>
+  function fetchPage(name){
+    fetch(name).then(function(response){
+      response.text().then(function(text){
+       document.querySelector('article').innerHTML = text;
+      })
+  });
+}
+
+이 부분의 name을 list로 바꾸면 되고, querySelector('article')을 nav로 바꾸면 된다.
+
+    fetch('list').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('nav').innerHTML = text;
+      })
+  });
+}
+
+이렇게.
+근데 잘 안된다.
+
+원인을 찾아보면, Cannot set property innerHTML of null이라는 오류가 뜨는데,
+이 오류줄을 클릭해보면 innerHTML을 사용했는데, 사용할수없다는 코드를 볼수있게된다.
+잘보면  document.querySelector('nav').innerHTML = text; 이 부분이 오류가 나는데
+querySelector('nav') 그 위에 article 같은 경우는 태그의 이름이었고
+이 nav는 ol의 id값이기 때문에 오류가 난 것이다. 
+그럼 이것을 어떻게 하기로 약속되어있냐 ? 
+#을 붙이기로 약속되어있다.
+
+    fetch('list').then(function(response){
+      response.text().then(function(text){
+       document.querySelector('#nav').innerHTML = text;
+      })
+  });
+}
+이렇게.
+
+list에 데이터같은 녀석들을 잘 옮겨넣었다면 이제, 정상적으로 잘 돌아가는 것을 확인할수 있을 것이다.
+
+그럼 만약에 글목록이 더 추가가 되어서, "Ajax"라는 녀석을 더 추가를해야되는 상황이다.
+그럼 list에서 똑같은 녀석으로 만들어 주면된다.
+정상적으로 나오는 것을 확인할수 있음.
+
+이제는 data가 들어가있는 list라는 파일을 수정하는 것을 통하여
+애플리케이션 입장에서는 사용자들이 마음대로 수정하다 생길수있는 사고를 방지할수있고,
+컨텐츠를 입력하는 입장에서, 컨텐츠를 어디다, 어떻게 입력해야되는 것으로부터 자유로울 수 있다.
+근데 조금 아쉽다.
+다음 강의에서는 이것을 조금 더 컴팩트하게 만드는 법을 알아볼것이다.
+
+## 9-2. 글 목록 (2/2)
