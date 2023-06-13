@@ -1,1 +1,7 @@
-gibson is ...
+<html>
+<body>         
+    <a onclick="fetchPrj('g1')">g1</a>
+        <article>
+        </article> 
+    </body>
+</html>

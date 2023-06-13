@@ -14,18 +14,36 @@
  <article>
  </article>
  <script>
-function fetchPrj(blanq){
+//feth 리팩토링 -> 함수화 
+function fetchPrj(blanq){ 
   fetch(blanq).then(function(resp){
     resp.text().then(function(text){
       document.querySelector('article').innerHTML = text;
     });
   });
 }
+//해쉬뱅 #! 을 이용한 URL 처리
 if(location.hash){
   fetchPrj(location.hash.substr(2));
 }else{
   fetchPrj('hs');
 }
+//컴팩트하게 묶어서 관리할수있는 Ajax의 fetch API 장점
+fetch('list').then(function(resp){
+  resp.text().then(function(text){
+    var items = text.split(',');
+    var i = 0;
+    var tags = '';
+    while(i<items.length){
+      var item = items[i];
+      var tag = '<li><a href="#!'+item+'" onclick="fetchPrj(\''+item+'\')">'+item+'</a></li>';
+      tags = tags + tag;
+      i = i+1;
+    }
+    document.querySelector('#ElecL').innerHTML = tags;
+  })
+});
+
  </script>
 </body>
 </html>
