@@ -1,5 +1,19 @@
 <!doctype html>
 <html>
+  <style>
+    #ElecL {
+      text-align: center;       
+      list-style-position: inside; 
+    }
+    article {
+      text-align: center;
+    }
+    #Holow{
+      width: 10%;
+      height: 10%;
+    }
+  </style>
+  
 <head>
   <title>Electric Guitar: rechness for my life</title>
   <meta charset="utf-8">
@@ -7,14 +21,16 @@
   <script src="colors.js"></script>
 </head>
 <body>
+<div align="center">
 <h1><a href="#hs">Hello Sir</a></h1>
+</div>
 <ol id="ElecL">
- <li><a href="#!gibson" onclick="fetchPrj('gibson')">깁슨</a></li>
+
  </ol>
  <article>
  </article>
  <script>
-//feth 리팩토링 -> 함수화 
+//feth 리팩토링 -> 함수화
 function fetchPrj(blanq){ 
   fetch(blanq).then(function(resp){
     resp.text().then(function(text){
@@ -36,7 +52,9 @@ fetch('list').then(function(resp){
     var tags = '';
     while(i<items.length){
       var item = items[i];
+      item = item.trim();
       var tag = '<li><a href="#!'+item+'" onclick="fetchPrj(\''+item+'\')">'+item+'</a></li>';
+      
       tags = tags + tag;
       i = i+1;
     }

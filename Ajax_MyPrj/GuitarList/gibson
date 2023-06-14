@@ -1,0 +1,12 @@
+<html>
+<body> 
+    <a href="#g1" onclick="fetchPrj('g1')">
+    <img 
+    src="guitarImage/할로우바디.png" 
+    alt="g1"
+    id="Holow">
+    할로우바디 깁슨
+    </a> 
+    <a href="#!g2" onclick="fetchPrj('g2')">레스폴</a>   
+</body>
+</html>
